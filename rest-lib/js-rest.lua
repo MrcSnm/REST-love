@@ -76,7 +76,7 @@ local function put(url, requestHeader, data, onDataLoad)
             xhttp.open("PUT", "%s", true);
             %s
             xhttp.send();
-    ]], url, generateHeader(requestHeader, _TABLE_TO_JSON(data))), onDataLoad, nil, nil, "Put");
+    ]], url, generateHeader(requestHeader), _TABLE_TO_JSON(data)), onDataLoad, nil, nil, "Put");
 end
 
 local function delete(url, requestHeader, onDataLoad)
@@ -105,4 +105,6 @@ return {
     put = put;
     patch = patch;
     delete = delete;
+    start = nil;
+    retrieveFunction = JS.retrieveData
 }

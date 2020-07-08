@@ -1,7 +1,7 @@
 require "module-loader"
 
 local OS = love.system.getOS()
-local rest = {}
+rest = {}
 
 function _TABLE_TO_JSON(data, isRecursive)
     if(type(data) == "table") then
@@ -39,21 +39,14 @@ elseif(OS == "Windows") then
 else
     rest = require "rest-lib.default-rest"
 end
-
-
-function UPDATE(dt)
-    if(love.system.getOS() == "Web") then
-        return retrieveData(dt)
-    else
-        return false
-    end
+if(rest.start ~= nil) then
+    rest.start() 
 end
 
-betterOs = 
-{
-    hasSupport = _hasOsSupport,
-    outDir = dir,
-    exec = getOsExecResult,
-    isDebug = true,
-    rest = rest
-}
+
+local function UPDATE(dt)
+    return rest.retrieveFunction(dt)
+end
+
+rest.isDebug = true;
+rest.retrieve = UPDATE;
