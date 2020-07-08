@@ -1,12 +1,20 @@
-local _defaultCPath = love.filesystem.getCRequirePath()
+local _defaultCPath = ""
+local os = love.system.getOS()
+if(os ~= "Web") then
+    _defaultCPath = love.filesystem.getCRequirePath()
+end
 local _defaultLPath = love.filesystem.getRequirePath()
 
 local function setReqPath(path)
-    love.filesystem.setCRequirePath(path.."/??")
+    if(os ~= "Web") then
+        love.filesystem.setCRequirePath(path.."/??")
+    end
     love.filesystem.setRequirePath(path.."/?.lua;?/init.lua")
 end
 local function restorePath()
-    love.filesystem.setCRequirePath(_defaultCPath)
+    if(os ~= "Web") then
+        love.filesystem.setCRequirePath(_defaultCPath)
+    end
     love.filesystem.setRequirePath(_defaultLPath)
 end
 

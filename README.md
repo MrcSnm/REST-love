@@ -31,10 +31,20 @@ local js = requireFromLib("js", "js")
 This is useful as "js" may require other libs inside it's own project, so, you won't need to adapt anything
 
 # JS
-This is a project dependency, REST calls will be adapted to the [Love.js-Api-Player](https://github.com/MrcSnm/Love.js-Api-Player)
+This is a project dependency, REST calls will be adapted to the [**Love.js-Api-Player**](https://github.com/MrcSnm/Love.js-Api-Player)
 Good thing about this is that you won't need to call yourself XMLHttpRequest
 
 
 ## REST
-Where the project magic happens, it has its own defined behavior for Default(Android and Linux), Windows and Js
-
+Where the project magic happens, it has its own defined behavior for Default(Android and Linux), Windows and Web, every REST function has
+async support, and, for actually 'loading' the request data, you need to include in your love.update function
+```lua
+rest.update(dt)
+```
+If you want it to be sync, just make it return if rest.update returns true:
+```lua
+if(rest.update(dt)) then
+    return
+end
+```
+Please, notice that if you're already using Love.js Api-Player, there will be no need to call `JS.retrieveData(dt)`

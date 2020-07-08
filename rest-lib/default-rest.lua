@@ -2,10 +2,10 @@ local _hasOsSupport = os.execute("echo 'Checking if has OS Support'") == 0
 if(_hasOsSupport) then
     love.filesystem.createDirectory("os")
 end
-local _hasCurlSupport = os.execute("curl --help") == 0
+local _curl = os.execute("curl")
+local _hasCurlSupport = (_curl == 0 or _curl == 256 or _curl == 512 or _curl == 2 or _curl == 1) --Common accepted return codes
 local dir = love.filesystem.getSaveDirectory().."/os/"
 local fileBuffer = "os/buffer.txt"
-
 
 local requestQueue = {}
 local thread = nil
@@ -36,7 +36,6 @@ local function start()
             local command = ""
             local input = love.thread.getChannel("REST_INPUT")
             local output = love.thread.getChannel("REST_OUTPUT")
-            local myId = 0
             while true do
                 command = input:pop()
                 if(command == "REST_EXIT") then
@@ -46,8 +45,7 @@ local function start()
                     local data = love.filesystem.read("%s")
                     love.filesystem.remove("%s")
                     output:push(data)
-                    output:push(tostring(myId))
-                    myId = myId + 1
+                    output:push(tostring(input:pop()))
                 end
 
             end
@@ -56,6 +54,11 @@ local function start()
     thread:start()
     inputChannel = love.thread.getChannel("REST_INPUT")
     outputChannel = love.thread.getChannel("REST_OUTPUT")
+    local _quit = love.event.quit
+    love.event.quit = function ()
+        inputChannel:push("REST_EXIT")
+        _quit()
+    end
 end
 
 local function retrieveData()
@@ -64,10 +67,11 @@ local function retrieveData()
     
     while(data ~= nil) do
         local id = outputChannel:pop()
-        requestQueue[1].onLoad(data)
+        requestQueue[1].onLoad(data, id)
         table.remove(requestQueue, 1)
         data = outputChannel:pop()
     end
+
     return isRetrieving
 end
 
@@ -79,6 +83,7 @@ local function asyncOnLoad(strCommand, onLoad)
     inputChannel:push(generateOutputCommand(strCommand))
     local request = _Request:new(onLoad)
     table.insert(requestQueue, request)
+    print(#requestQueue)
     inputChannel:push(tostring(request.id))
 end
 
