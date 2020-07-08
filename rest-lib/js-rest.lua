@@ -7,7 +7,7 @@ local function generateHeader(tbHeader)
     return header
 end
 
-local function get(url, requestHeader)
+local function get(url, requestHeader, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
             var xhttp = new XMLHttpRequest();
@@ -22,12 +22,10 @@ local function get(url, requestHeader)
             xhttp.open("GET", "%s", true);
             %s
             xhttp.send();
-    ]], url, generateHeader(requestHeader)), function(data)print(data)end, nil, nil, "Get", function(err)
-
-    end);
+    ]], url, generateHeader(requestHeader)), onDataLoad, nil, nil, "Get");
 end
 
-local function post(url, requestHeader)
+local function post(url, requestHeader, data, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
             var xhttp = new XMLHttpRequest();
@@ -41,11 +39,11 @@ local function post(url, requestHeader)
             };
             xhttp.open("POST", "%s", true);
             %s
-            xhttp.send();
-    ]], url, generateHeader(requestHeader)), function(data)print(data)end, nil, nil, "Post");
+            xhttp.send(%s);
+    ]], url, generateHeader(requestHeader), _TABLE_TO_JSON(data)), onDataLoad, nil, nil, "Post");
 end
 
-local function patch(url, requestHeader)
+local function patch(url, requestHeader, data, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
             var xhttp = new XMLHttpRequest();
@@ -59,11 +57,11 @@ local function patch(url, requestHeader)
             };
             xhttp.open("PATCH", "%s", true);
             %s
-            xhttp.send();
-    ]], url, generateHeader(requestHeader)), function(data)print(data)end, nil, nil, "Patch");
+            xhttp.send(%s);
+    ]], url, generateHeader(requestHeader), _TABLE_TO_JSON(data)), onDataLoad, nil, nil, "Patch");
 end
 
-local function put(url, requestHeader)
+local function put(url, requestHeader, data, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
             var xhttp = new XMLHttpRequest();
@@ -78,10 +76,10 @@ local function put(url, requestHeader)
             xhttp.open("PUT", "%s", true);
             %s
             xhttp.send();
-    ]], url, generateHeader(requestHeader)), function(data)print(data)end, nil, nil, "Put");
+    ]], url, generateHeader(requestHeader, _TABLE_TO_JSON(data))), onDataLoad, nil, nil, "Put");
 end
 
-local function delete(url, requestHeader)
+local function delete(url, requestHeader, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
             var xhttp = new XMLHttpRequest();
@@ -96,7 +94,7 @@ local function delete(url, requestHeader)
             xhttp.open("DELETE", "%s", true);
             %s
             xhttp.send();
-    ]], url, generateHeader(requestHeader)), function(data)print(data)end, nil, nil, "Delete");
+    ]], url, generateHeader(requestHeader)), onDataLoad, nil, nil, "Delete");
 end
 
 
