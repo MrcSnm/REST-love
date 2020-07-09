@@ -28,9 +28,6 @@ end
 
 function requireFromLib(libPath, fileName)
     setReqPath(libPath)
-    print(love.filesystem.getRequirePath())
-    print(_defaultLPath)
-
     local ret = require(fileName)
     restorePath()
     return ret

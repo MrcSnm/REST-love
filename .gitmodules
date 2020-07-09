@@ -1,3 +1,6 @@
 [submodule "js"]
 	path = js
 	url = https://github.com/MrcSnm/Love.js-Api-Player.git
+[submodule "luajit-request"]
+	path = luajit-request
+	url = https://github.com/MrcSnm/luajit-request.git
