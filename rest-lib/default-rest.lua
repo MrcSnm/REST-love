@@ -19,7 +19,7 @@ local idNum = 0
 local _Request =
 {
     onLoad = nil;
-    id = "",
+    id = "";
     new = function (self, onLoad)
         local obj = setmetatable({}, self)
         self.__index = self
@@ -112,6 +112,11 @@ local function generateHeader(tbHeader)
     return header
 end
 
+local function head(url, method, requestHeader, onLoad)
+    if(not _hasCurlSupport) then return end
+    load("curl -X "..method.." -I "..generateHeader(requestHeader)..url, onLoad)
+end
+
 local function get(url, requestHeader, onLoad)
     if(not _hasCurlSupport) then return end
     load("curl "..generateHeader(requestHeader)..url, onLoad)
@@ -142,6 +147,7 @@ local function delete(url, requestHeader, data, onLoad)
 end
 
 return{
+    method = method;
     get = get;
     post = post;
     put = put;

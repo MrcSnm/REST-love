@@ -7,6 +7,24 @@ local function generateHeader(tbHeader)
     return header
 end
 
+local function head(url, method, requestHeader, onDataLoad)
+    JS.newPromiseRequest(JS.stringFunc(
+        [[
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function()
+            {    
+                if (this.readyState == 4)
+                    if(this.status == 200)
+                        _$_(this.getAllResponseHeaders());
+                    else
+                        _$_("ERROR " + this.status + "\n"+this.responseText);
+            };
+            xhttp.open("%s", "%s", true);
+            %s
+            xhttp.send();
+    ]],method, url, generateHeader(requestHeader)), onDataLoad, nil, nil, "Get");
+end
+
 local function get(url, requestHeader, onDataLoad)
     JS.newPromiseRequest(JS.stringFunc(
         [[
@@ -100,6 +118,7 @@ end
 
 
 return {
+    head = head;
     get = get;
     post = post;
     put = put;
