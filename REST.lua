@@ -10,15 +10,15 @@ METHODS =
 }
 
 local OS = love.system.getOS()
-rest = {}
+REST = {}
 --Providing autocomplete
-rest.head = function(url, requestHeader, methodOrOnLoad, onLoad)end
-rest.get = function(url, requestHeader, onLoad)end
-rest.post = function(url, requestHeader, data, onLoad)end
-rest.put = function(url, requestHeader, data, onLoad)end
-rest.patch = function(url, requestHeader, data, onLoad)end
-rest.delete = function(url, requestHeader, data, onLoad)end
-rest.retrieve = function(dt)end
+REST.head = function(url, requestHeader, methodOrOnLoad, onLoad)end
+REST.get = function(url, requestHeader, onLoad)end
+REST.post = function(url, requestHeader, data, onLoad)end
+REST.put = function(url, requestHeader, data, onLoad)end
+REST.patch = function(url, requestHeader, data, onLoad)end
+REST.delete = function(url, requestHeader, data, onLoad)end
+REST.retrieve = function(dt)end
 --End autocomplete
 
 --This was meant to make it compatible out-of-the-box with the rest of the world, not only Lua, so the decision was to make
@@ -57,16 +57,16 @@ end
 
 if(OS == "Web") then
     requireFromLib("js", "js")
-    rest = require "rest-lib.js-rest"
+    REST = require "rest-lib.js-rest"
 elseif(OS == "Windows") then
-    rest = require "rest-lib.win-rest"
+    REST = require "rest-lib.win-rest"
 else
-    rest = require "rest-lib.default-rest"
+    REST = require "rest-lib.default-rest"
 end
-if(rest.start ~= nil) then
-    rest.start() 
+if(REST.start ~= nil) then
+    REST.start() 
     --Auto-destroy start for not causing any problem
-    rest.start = nil
+    REST.start = nil
 end
 
 
@@ -74,5 +74,5 @@ local function UPDATE(dt)
     return rest.retrieveFunction(dt)
 end
 
-rest.isDebug = true;
-rest.retrieve = UPDATE;
+REST.isDebug = true;
+REST.retrieve = UPDATE;
