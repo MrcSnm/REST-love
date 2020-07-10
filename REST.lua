@@ -71,7 +71,7 @@ end
 
 
 local function UPDATE(dt)
-    return rest.retrieveFunction(dt)
+    return REST.retrieveFunction(dt)
 end
 
 REST.isDebug = true;

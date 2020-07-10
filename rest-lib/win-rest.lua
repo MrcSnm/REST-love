@@ -41,7 +41,6 @@ local function _WIN_REST(url, method, headers, data)
     end
     tab.headers = headers
     local resp = req.send(url, tab)
-    print(url, method, header, data)
     if(isHead) then
         return resp.raw_headers
     else
@@ -54,7 +53,7 @@ local function start()
         [[
             require "module-loader"
             local req = requireFromLib("luajit-request", "luajit-request")
-            local function _WIN_REST(url, methd, headers, data)
+            local function _WIN_REST(url, method, headers, data)
                 local tab = {}
                 local isHead = (data == "HEAD")
                 if(headers == nil) then
@@ -68,7 +67,6 @@ local function start()
                     headers["Content-Type"] = "application/json"
                 end
                 tab.headers = headers
-                print(tab.data)
                 local resp = req.send(url, tab)
                 if(isHead) then
                     return resp.raw_headers

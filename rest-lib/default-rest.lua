@@ -83,7 +83,6 @@ local function asyncOnLoad(strCommand, onLoad)
     inputChannel:push(generateOutputCommand(strCommand))
     local request = _Request:new(onLoad)
     table.insert(requestQueue, request)
-    print(#requestQueue)
     inputChannel:push(tostring(request.id))
 end
 
