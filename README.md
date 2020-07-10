@@ -33,11 +33,16 @@ loadBarInstance.addContentToLoad(loadFunction, onLoad, contentName)
 If you wish, in the content name you can pass a special character that will be replaced by the current load progress,
 a simple use-case is:
 ```lua
-EXAMPLE_HTML = ""
+require "loadbar"
+loadBarInstance = LoadBar:new(width, height, frontTexture, backTexture)
+imgs = {}
 loadBarInstance.addContentToLoad(function()
     imgs["myImg"] = love.graphics.newImage("myImg.png")
 end, nil, "Loading myImg: $")
 ```
+
+Then just add `loadBarInstance:update(dt)` on your update function
+And `loadBarInstance:render` as the last thing to render on your draw function
 
 ## Module-Loader
 This is a really good thing when you just copy/paste some lib into your project and you need to import it without doing
