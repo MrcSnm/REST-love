@@ -3,6 +3,22 @@ This is a common set of things for calling REST APIs in Love, it supports Androi
 Every REST API is implemented with async functionality, so, it is running on another thread in every platform
 The best thing about that is that every platform doesn't need any additional code (Except for Web that you need to add the script tag)!
 
+## Setting up REST-love
+- Clone it on your folder
+```sh
+git clone https://github.com/MrcSnm/REST-love.git
+```
+- Enter on it
+```sh
+cd REST-love
+```
+- Update every submodule
+```sh
+git submodule update --init --recursive
+```
+- Now just `require "REST"`, it defines a global named `REST`
+- If you wish to use **module-loader** into your project, just delete the `require module-loader` from REST.lua (First line)
+
 ## AsyncLoader
 AsyncLoader(Actually CoroutineLoader) is meant to be used by the LoadBar module, but you can extend its use yourself, you can use that
 to do any heavy and synchronous operation for thiner operations, this is a Singleton, don't extend it unless
@@ -41,11 +57,11 @@ Good thing about this is that you won't need to call yourself XMLHttpRequest
 Where the project magic happens, it has its own defined behavior for Default(Android and Linux), Windows and Web, every REST function has
 async support, and, for actually 'loading'(actually used for onLoad callback) the request data, you need to include in your love.update function
 ```lua
-rest.retrieve(dt)
+REST.retrieve(dt)
 ```
 If you want it to be sync(or execute any action), just make it return if rest.update returns true:
 ```lua
-if(rest.retrieve(dt)) then
+if(REST.retrieve(dt)) then
     return
 end
 ```
