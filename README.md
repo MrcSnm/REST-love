@@ -1,9 +1,10 @@
 # REST-love
 This is a common set of things for calling REST APIs in Love, it supports Android, Web, Linux and Windows.
-The best thing about that is that Android doesn't need any additional code!
+Every REST API is implemented with async functionality, so, it is running on another thread in every platform
+The best thing about that is that every platform doesn't need any additional code (Except for Web that you need to add the script tag)!
 
 ## AsyncLoader
-AsyncLoader is meant to be used by the LoadBar module, but you can extend its use yourself, you can use that
+AsyncLoader(Actually CoroutineLoader) is meant to be used by the LoadBar module, but you can extend its use yourself, you can use that
 to do any heavy and synchronous operation for thiner operations, this is a Singleton, don't extend it unless
 adapting it first, call it directly
 
@@ -18,17 +19,18 @@ a simple use-case is:
 ```lua
 EXAMPLE_HTML = ""
 loadBarInstance.addContentToLoad(function()
-    EXAMPLE_HTML = betterOs.curl.get("https://example.com")
-end, nil, "Getting Example.html: $")
+    imgs["myImg"] = love.graphics.newImage("myImg.png")
+end, nil, "Loading myImg: $")
 ```
 
 ## Module-Loader
 This is a really good thing when you just copy/paste some lib into your project and you need to import it without doing
-any kind of code replace, e.g:
+any kind of code replacement, e.g:
 ```lua
 local js = requireFromLib("js", "js")
+local req = requireFromLib("luajit-request", "luajit-request")
 ```
-This is useful as "js" may require other libs inside it's own project, so, you won't need to adapt anything
+This is useful as "js" or "luajit-request" may require other libs inside it's own project, so, you won't need to adapt anything
 
 # JS
 This is a project dependency, REST calls will be adapted to the [**Love.js-Api-Player**](https://github.com/MrcSnm/Love.js-Api-Player)
@@ -37,14 +39,18 @@ Good thing about this is that you won't need to call yourself XMLHttpRequest
 
 ## REST
 Where the project magic happens, it has its own defined behavior for Default(Android and Linux), Windows and Web, every REST function has
-async support, and, for actually 'loading' the request data, you need to include in your love.update function
+async support, and, for actually 'loading'(actually used for onLoad callback) the request data, you need to include in your love.update function
 ```lua
-rest.update(dt)
+rest.retrieve(dt)
 ```
-If you want it to be sync, just make it return if rest.update returns true:
+If you want it to be sync(or execute any action), just make it return if rest.update returns true:
 ```lua
-if(rest.update(dt)) then
+if(rest.retrieve(dt)) then
     return
 end
 ```
-Please, notice that if you're already using Love.js Api-Player, there will be no need to call `JS.retrieveData(dt)`
+
+### Notes
+- Please, notice that if you're already using Love.js Api-Player, there will be no need to call `JS.retrieveData(dt)`
+- Inline sync is implemented for Default and Windows, but as it is still not supported on Web, as it **always** uses the Web thread for making the http request, I did not implement any function for alternating inline sync and async, however, if you do wish to use, just enter in the target (default or win) and change
+- I don't really remember if I'm using x32 or x64 libcurl, I believe it is x32(because filesize)
