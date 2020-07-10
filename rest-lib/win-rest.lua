@@ -177,7 +177,7 @@ local function get(url, requestHeader, onLoad)         load(url, METHODS.GET,   
 local function post(url, requestHeader, data, onLoad)  load(url, METHODS.POST,  requestHeader, data, onLoad)end
 local function put(url, requestHeader, data, onLoad)   load(url, METHODS.PUT,   requestHeader, data, onLoad)end
 local function patch(url, requestHeader, data, onLoad) load(url, METHODS.PATCH, requestHeader, data, onLoad)end
-local function delete(url, requestHeader, data, onLoad)load(url, METHODS.DELETE,requestHeader, data, onLoad)end
+local function delete(url, requestHeader, onLoad)load(url, METHODS.DELETE,requestHeader, nil, onLoad)end
 
 return{
     head = head;

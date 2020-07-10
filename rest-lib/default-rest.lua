@@ -139,14 +139,14 @@ local function patch(url, requestHeader, data, onLoad)
     load("curl "..generateHeader(requestHeader).. " -X PATCH -d "..data.." '"..url.."'", onLoad)
 end
 
-local function delete(url, requestHeader, data, onLoad)
+local function delete(url, requestHeader, onLoad)
     if(not _hasCurlSupport) then return end
     data = _TABLE_TO_JSON(data)
-    load("curl "..generateHeader(requestHeader).. " -X DELETE -d "..data.." '"..url.."'", onLoad)
+    load("curl "..generateHeader(requestHeader).. " -X DELETE '"..url.."'", onLoad)
 end
 
 return{
-    method = method;
+    head = head;
     get = get;
     post = post;
     put = put;
