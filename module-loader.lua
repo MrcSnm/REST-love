@@ -26,7 +26,7 @@ end
 
 function loadFromLib(libsPath, ...)
     setReqPath(libsPath)
-    for _, files in ipairs(arg) do
+    for _, files in ipairs({...}) do
         require(files)
     end
     restorePath()
