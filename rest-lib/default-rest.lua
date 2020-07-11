@@ -55,9 +55,9 @@ local function start()
     inputChannel = love.thread.getChannel("REST_INPUT")
     outputChannel = love.thread.getChannel("REST_OUTPUT")
     local _quit = love.event.quit
-    love.event.quit = function ()
+    love.event.quit = function (str)
         inputChannel:push("REST_EXIT")
-        _quit()
+        _quit(str)
     end
 end
 
