@@ -113,36 +113,36 @@ end
 
 local function head(url, method, requestHeader, onLoad)
     if(not _hasCurlSupport) then return end
-    load("curl -X "..method.." -I "..generateHeader(requestHeader)..url, onLoad)
+    load("curl -s -X "..method.." -I "..generateHeader(requestHeader)..url, onLoad)
 end
 
 local function get(url, requestHeader, onLoad)
     if(not _hasCurlSupport) then return end
-    load("curl "..generateHeader(requestHeader)..url, onLoad)
+    load("curl -s "..generateHeader(requestHeader)..url, onLoad)
 end
 
 local function post(url, requestHeader, data, onLoad)
     if(not _hasCurlSupport) then return end
     data = _TABLE_TO_JSON(data)
-    load("curl "..generateHeader(requestHeader).." -X POST -d "..data.." '"..url.."'", onLoad)
+    load("curl -s "..generateHeader(requestHeader).." -X POST -d "..data.." '"..url.."'", onLoad)
 end
 
 local function put(url, requestHeader, data, onLoad)
     if(not _hasCurlSupport) then return end
     data = _TABLE_TO_JSON(data)
-    load("curl "..generateHeader(requestHeader).." -X PUT -d "..data.." '"..url.."'", onLoad)
+    load("curl -s "..generateHeader(requestHeader).." -X PUT -d "..data.." '"..url.."'", onLoad)
 end
 
 local function patch(url, requestHeader, data, onLoad)
     if(not _hasCurlSupport) then return end
     data = _TABLE_TO_JSON(data)
-    load("curl "..generateHeader(requestHeader).. " -X PATCH -d "..data.." '"..url.."'", onLoad)
+    load("curl -s "..generateHeader(requestHeader).. " -X PATCH -d "..data.." '"..url.."'", onLoad)
 end
 
 local function delete(url, requestHeader, onLoad)
     if(not _hasCurlSupport) then return end
     data = _TABLE_TO_JSON(data)
-    load("curl "..generateHeader(requestHeader).. " -X DELETE '"..url.."'", onLoad)
+    load("curl -s "..generateHeader(requestHeader).. " -X DELETE '"..url.."'", onLoad)
 end
 
 return{
