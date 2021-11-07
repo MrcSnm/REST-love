@@ -19,6 +19,31 @@ git submodule update --init --recursive
 - Now just `require "REST"`, it defines a global named `REST`
 - If you wish to use **module-loader** into your project, just delete the `require module-loader` from REST.lua (First line)
 
+## Simple Example
+
+Here is a simple example of using it in a love-game. Let's imagine you have recursive-cloned this repo to a sub-folder in your game: `lib/REST-love`:
+
+```lua
+-- this lets you require things with different paths other than root
+require "lib.REST-love.module-loader"
+
+-- this adds REST global
+requireFromLib("lib/REST-love", "REST")
+
+function love.load()
+  REST.get("https://mycoolserver.com/api", nil, function(data)
+   -- Do something here with data. It's text.
+  end)
+end
+
+function love.update(dt)
+  -- this is needed to trigger pending callbacks
+  -- it's wrapped with pcall to prevent it from crashing game
+  pcall(function() REST.retrieve(dt) end)
+end
+```
+
+
 ## AsyncLoader
 AsyncLoader(Actually CoroutineLoader) is meant to be used by the LoadBar module, but you can extend its use yourself, you can use that
 to do any heavy and synchronous operation for thiner operations, this is a Singleton, don't extend it unless
