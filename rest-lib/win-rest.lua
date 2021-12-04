@@ -1,4 +1,7 @@
--- local req = requireFromLib("luajit-request", "luajit-request")
+if(requireFromLib == nil) then
+    require "lib.REST-love.module-loader"
+end
+
 local req = requireFromLib("luajit-request", "luajit-request")
 
 love.filesystem.createDirectory("os")
@@ -49,10 +52,14 @@ local function _WIN_REST(url, method, headers, data)
 end
 
 local function start()
+    
     thread = love.thread.newThread(
         [[
-            require "module-loader"
-            local req = requireFromLib("luajit-request", "luajit-request")
+            require "lib.REST-love.module-loader"
+
+            local req = requireFromLib("lib/REST-love/luajit-request", "luajit-request")
+
+
             local function _WIN_REST(url, method, headers, data)
                 local tab = {}
                 local isHead = (data == "HEAD")
@@ -74,27 +81,28 @@ local function start()
                     return resp.body
                 end
             end
-            
 
             local command = ""
             local input = love.thread.getChannel("REST_INPUT")
             local output = love.thread.getChannel("REST_OUTPUT")
+
             while true do
-                command = input:pop()
+                command = input:demand()
                 if(command == "REST_EXIT") then
                     return
                 elseif(command ~= nil and command ~= "nil") then
                     local url = command
-                    local method = input:pop()
-                    local header = input:pop()
-                    local data = input:pop()
+                    local method = input:demand()
+                    local header = input:demand()
+                    local data = input:demand()
                     local out = _WIN_REST(url, method, header, data)
                     output:push(out)
-                    output:push(tostring(input:pop()))
+                    output:push(tostring(input:demand()))
                 end
             end
         ]])
     thread:start()
+
     inputChannel = love.thread.getChannel("REST_INPUT")
     outputChannel = love.thread.getChannel("REST_OUTPUT")
     local _quit = love.event.quit
@@ -119,6 +127,7 @@ local function retrieveData()
 end
 
 local function asyncOnLoad(url, method, header,data, onLoad)
+
     inputChannel:push(url)
     inputChannel:push(method)
     inputChannel:push(header)

@@ -1,4 +1,4 @@
-require "module-loader"
+-- require "module-loader"
 METHODS =
 {
     HEAD = "HEAD";
